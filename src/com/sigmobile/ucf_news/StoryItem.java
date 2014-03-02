@@ -8,6 +8,12 @@ public class StoryItem {
 	private String mTitle;
 	private String mUrl;
 
+	@Override
+	public String toString() {
+		// Make the default toString() method for a story return the title.
+		return mTitle;
+	}
+
 	public String getTitle() {
 		return mTitle;
 	}

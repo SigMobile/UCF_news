@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class FeedFragment extends ListFragment {
-	private static final String TAG = "ListFragment";
+	private static final String TAG = "FeedFragment";
 
 	private ListView mListView;
 	ArrayList<StoryItem> mItems;
@@ -27,7 +28,7 @@ public class FeedFragment extends ListFragment {
 		// cycle.
 		setRetainInstance(true);
 
-		// Execute the AsyncTask to go go and DL our RSS.
+		// Execute the AsyncTask to go and DL our RSS.
 	}
 
 	@Override
@@ -61,9 +62,12 @@ public class FeedFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		// take user to article
-		super.onListItemClick(l, v, position, id);
+		//
+		// Get the story from the adapter using the position.
 	}
 
+	// This is the AsynchTask
+	//
 	// private inner class to do all of the background networking work.
 	private class FetchItemsTask extends
 			AsyncTask<Void, Void, ArrayList<StoryItem>> {
@@ -84,17 +88,29 @@ public class FeedFragment extends ListFragment {
 		// abuncha story items
 		@Override
 		protected void onPostExecute(ArrayList<StoryItem> result) {
-			// get the result
+			// get the result and put it in our list of stories
 
 			// then we need to fill up the adapter to the list view
 		}
 	}
 
+	// This is the adapter class.
+	// An adapter is the middle man between a view (i.e. ListFragment) and the
+	// data. It is what get's the data that will fill the list view.
 	private class StoryAdapter extends ArrayAdapter<StoryItem> {
 
-		// constuctor
+		// constuctor, as of right now we are going to use the default simple
+		// list item. Later we will create a newer nicer looking, more
+		// informative
 		public StoryAdapter(ArrayList<StoryItem> stories) {
 			super(getActivity(), android.R.layout.simple_list_item_1, stories);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// This method will be used once we have a more complex
+			// TableViewCell.
+			return super.getView(position, convertView, parent);
 		}
 
 	}
