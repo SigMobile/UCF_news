@@ -100,9 +100,9 @@ public class NewsFetcher {
 
 		} catch (IOException e) {
 			Log.e(TAG, "Failed to fetch items", e);
-		} catch (XmlPullParserException e) {
-			Log.e(TAG, "Failed to parse items", e);
-		}
+		} //catch (XmlPullParserException e) {
+			//Log.e(TAG, "Failed to parse items", e);
+	//	}
 		return items;
 	}
 
