@@ -40,7 +40,7 @@ public class NewsFetcher {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			// Create an input stream connected to the HTTPURLConnection we made
 			InputStream in = connection.getInputStream();
-			
+
 			// make sure we're actually connected
 			// Check the connections response code against the STATIC
 			// httpurlconnection variable that means we're connected and
@@ -110,7 +110,7 @@ public class NewsFetcher {
 	}
 
 	// method to parse our XML photos
-	// The XMLPullParser is actually used internally by Android OS to to inflate
+	// The XMLPullParser is actually used internally by Android OS to inflate
 	// our layout files.
 	void parseItems(ArrayList<StoryItem> items, XmlPullParser parser)
 			throws XmlPullParserException, IOException {
@@ -122,11 +122,7 @@ public class NewsFetcher {
 		int eventType = parser.next();
 
 		while (eventType != XmlPullParser.END_DOCUMENT) {
-			if (eventType == XmlPullParser.START_TAG
-					&& (parser.getName().equalsIgnoreCase("item")
-							|| parser.getName().equalsIgnoreCase("title") || parser
-							.getName().equalsIgnoreCase("link") || parser
-							.getName().equalsIgnoreCase("content:encoded"))) {
+			if (eventType == XmlPullParser.START_TAG) {
 
 				if (parser.getName().equalsIgnoreCase("item")) {
 					insideItem = true;
@@ -141,8 +137,12 @@ public class NewsFetcher {
 
 					story.setUrl(parser.nextText());
 
-				}
-				else if (insideItem
+				} else if (insideItem
+						&& parser.getName().equalsIgnoreCase("pubDate")) {
+
+					story.setDate(parser.nextText());
+
+				} else if (insideItem
 						&& parser.getName().equalsIgnoreCase("content:encoded")) {
 
 					story.setContent(parser.nextText());

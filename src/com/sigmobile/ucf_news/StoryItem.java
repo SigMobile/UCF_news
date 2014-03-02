@@ -8,6 +8,7 @@ public class StoryItem {
 	private String mTitle;
 	private String mUrl;
 	private String mContent;
+	private String mDate;
 
 	@Override
 	public String toString() {
@@ -37,6 +38,14 @@ public class StoryItem {
 
 	public void setContent(String content) {
 		mContent = content;
+	}
+	
+	public String getDate() {
+		return mDate;
+	}
+	
+	public void setDate(String date) {
+		mDate = date;
 	}
 
 }

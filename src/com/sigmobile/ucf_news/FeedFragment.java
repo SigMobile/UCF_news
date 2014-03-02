@@ -16,8 +16,7 @@ import android.widget.ListView;
 public class FeedFragment extends ListFragment {
 	private static final String TAG = "FeedFragment";
 
-	// private ListView mListView;
-	ArrayList<StoryItem> mItems;
+	private ArrayList<StoryItem> mItems;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,8 @@ public class FeedFragment extends ListFragment {
 	}
 
 	private void setUpAdapter() {
-		// null checks
+		// null checks because we are using asynchtasks we need to make sure we
+		// have a hosting activity.
 		if (getActivity() == null)
 			return;
 
