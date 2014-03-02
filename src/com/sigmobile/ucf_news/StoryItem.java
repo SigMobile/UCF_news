@@ -7,6 +7,7 @@ public class StoryItem {
 	// url to a picture or something
 	private String mTitle;
 	private String mUrl;
+	private String mContent;
 
 	@Override
 	public String toString() {
@@ -28,6 +29,14 @@ public class StoryItem {
 
 	public void setUrl(String url) {
 		mUrl = url;
+	}
+
+	public String getContent() {
+		return mContent;
+	}
+
+	public void setContent(String content) {
+		mContent = content;
 	}
 
 }
