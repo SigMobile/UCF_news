@@ -3,15 +3,17 @@ package com.sigmobile.ucf_news;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class FeedFragment extends ListFragment {
 	private static final String TAG = "FeedFragment";
@@ -20,10 +22,9 @@ public class FeedFragment extends ListFragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
-		// retains the fragment so it will stay alive during the activity life
+		// retains the fragment so it will stay alive during the activity lifeS
 		// cycle.
 		setRetainInstance(true);
 
@@ -55,6 +56,14 @@ public class FeedFragment extends ListFragment {
 		// take user to article
 		//
 		// Get the story from the adapter using the position.
+
+		StoryItem story = mItems.get(position);
+
+		Uri storyUrl = Uri.parse(story.getUrl());
+
+		Intent i = new Intent(Intent.ACTION_VIEW, storyUrl);
+
+		startActivity(i);
 	}
 
 	// This is the AsynchTask
@@ -99,13 +108,31 @@ public class FeedFragment extends ListFragment {
 			super(getActivity(), android.R.layout.simple_list_item_1, stories);
 		}
 
-		// @Override
-		// public View getView(int position, View convertView, ViewGroup parent)
-		// {
-		// // This method will be used once we have a more complex
-		// // TableViewCell.
-		// return super.getView(position, convertView, parent);
-		// }
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			if (convertView == null) {
+				convertView = getActivity().getLayoutInflater().inflate(
+						R.layout.list_item_cell_story, null);
+			}
+
+			StoryItem s = getItem(position);
+
+			ImageView image = (ImageView) convertView
+					.findViewById(R.id.story_item_image);
+			image.setImageResource(R.drawable.ic_launcher);
+
+			TextView title = (TextView) convertView
+					.findViewById(R.id.story_item_title_text);
+			title.setText(s.getTitle());
+
+			TextView date = (TextView) convertView
+					.findViewById(R.id.story_item_date_published_text);
+			date.setText(s.getDate());
+
+			return convertView;
+
+		}
 
 	}
 

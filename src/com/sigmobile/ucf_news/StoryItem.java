@@ -7,8 +7,9 @@ public class StoryItem {
 	// url to a picture or something
 	private String mTitle;
 	private String mUrl;
-	private String mContent;
+	private String mContent, mUnparsedContent;
 	private String mDate;
+	private String mPictureUrl;
 
 	@Override
 	public String toString() {
@@ -36,16 +37,48 @@ public class StoryItem {
 		return mContent;
 	}
 
+	/**
+	 * 
+	 * @param content
+	 *            - the story content.
+	 * 
+	 *            This method sets to variables, it sets the unparsed Contents
+	 *            to a variable and also sets the parsed out content to a
+	 *            variable.
+	 */
 	public void setContent(String content) {
-		mContent = content;
+
+		setUnparsedContent(content);
+
+		mContent = parseHTML(content);
 	}
-	
+
+	public String getUnparsedContent() {
+		return mUnparsedContent;
+	}
+
+	public void setUnparsedContent(String unparsedContent) {
+		mUnparsedContent = unparsedContent;
+	}
+
 	public String getDate() {
 		return mDate;
 	}
-	
+
 	public void setDate(String date) {
 		mDate = date;
+	}
+
+	public String getPictureUrl() {
+		return mPictureUrl;
+	}
+
+	public void setPictureUrl(String pictureUrl) {
+		mPictureUrl = pictureUrl;
+	}
+
+	private String parseHTML(String contents) {
+		return android.text.Html.fromHtml(contents).toString();
 	}
 
 }
