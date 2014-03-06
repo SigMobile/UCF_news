@@ -1,5 +1,7 @@
 package com.sigmobile.ucf_news;
 
+import java.io.Serializable;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,37 +11,34 @@ import android.widget.TextView;
 
 public class ReaderFragment extends Fragment {
 
-	public static final String KEY_TITLE = "com.sigmobile.ucf_news.KEY_TITLE";
-	public static final String KEY_DATE = "com.sigmobile.ucf_news.KEY_DATE";
-	public static final String KEY_CONTENT = "com.sigmobile.ucf_news.KEY_CONTENT";
+	public static final String KEY_STORY = "com.sigmobile.ucf_news.KEY_STORY";
 	private TextView mTitleTextView, mDateTextView, mContentTextView;
 	private String mTitle, mDate, mContent;
+	private StoryItem mStory;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		//get the fragments arguments
+		// get the fragments arguments
 		Bundle args = getArguments();
 		if (args != null) {
-			mTitle = args.getString(KEY_TITLE);
-			mDate = args.getString(KEY_DATE);
-			mContent = args.getString(KEY_CONTENT);
+			mStory = (StoryItem) args.getSerializable(KEY_STORY);
 		}
 
 		View v = inflater.inflate(R.layout.fragment_reader, container, false);
 
 		mTitleTextView = (TextView) v
 				.findViewById(R.id.fragment_reader_story_title);
-		mTitleTextView.setText(mTitle);
+		mTitleTextView.setText(mStory.getTitle());
 
 		mDateTextView = (TextView) v
 				.findViewById(R.id.fragment_reader_story_date);
-		mDateTextView.setText(mDate);
+		mDateTextView.setText(mStory.getDate());
 
 		mContentTextView = (TextView) v
 				.findViewById(R.id.fragment_reader_story_content);
-		mContentTextView.setText(mContent);
+		mContentTextView.setText(mStory.getContent());
 
 		return v;
 	}
@@ -50,13 +49,10 @@ public class ReaderFragment extends Fragment {
 
 	// new instance method that will be used to instantiate the fragment and get
 	// fragment arguments.
-	public static ReaderFragment newInstance(String title, String date,
-			String content) {
+	public static ReaderFragment newInstance(StoryItem story) {
 		ReaderFragment rf = new ReaderFragment();
 		Bundle args = new Bundle();
-		args.putString(KEY_TITLE, title);
-		args.putString(KEY_DATE, date);
-		args.putString(KEY_CONTENT, content);
+		args.putSerializable(KEY_STORY, story);
 		rf.setArguments(args);
 		return rf;
 	}

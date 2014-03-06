@@ -6,14 +6,10 @@ public class ReaderActivity extends SingleFragmentActivity {
 
 	@Override
 	protected Fragment createFragment() {
-		String title = (String) getIntent().getStringExtra(
-				ReaderFragment.KEY_TITLE);
-		String date = (String) getIntent().getStringExtra(
-				ReaderFragment.KEY_DATE);
-		String content = (String) getIntent().getStringExtra(
-				ReaderFragment.KEY_CONTENT);
+		
+		StoryItem story = (StoryItem) getIntent().getSerializableExtra(ReaderFragment.KEY_STORY);
 
-		return ReaderFragment.newInstance(title, date, content);
+		return ReaderFragment.newInstance(story);
 	}
 
 }

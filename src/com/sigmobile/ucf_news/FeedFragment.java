@@ -65,9 +65,7 @@ public class FeedFragment extends ListFragment {
 		//
 		// startActivity(i);
 		Intent i = new Intent(getActivity(), ReaderActivity.class);
-		i.putExtra(ReaderFragment.KEY_TITLE, story.getTitle());
-		i.putExtra(ReaderFragment.KEY_DATE, story.getDate());
-		i.putExtra(ReaderFragment.KEY_CONTENT, story.getContent());
+		i.putExtra(ReaderFragment.KEY_STORY, story);
 		startActivity(i);
 	}
 

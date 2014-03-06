@@ -1,7 +1,13 @@
 package com.sigmobile.ucf_news;
 
-public class StoryItem {
+import java.io.Serializable;
 
+public class StoryItem implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2274504092267548833L;
 	// We will at least need a title and a URL to the story. I'm not sure what
 	// other xml attributes are in the the feed, we can add more later, like a
 	// url to a picture or something
