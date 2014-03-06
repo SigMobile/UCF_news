@@ -58,11 +58,16 @@ public class FeedFragment extends ListFragment {
 		// Get the story from the adapter using the position.
 
 		StoryItem story = mItems.get(position);
-
-		Uri storyUrl = Uri.parse(story.getUrl());
-
-		Intent i = new Intent(Intent.ACTION_VIEW, storyUrl);
-
+		//
+		// Uri storyUrl = Uri.parse(story.getUrl());
+		//
+		// Intent i = new Intent(Intent.ACTION_VIEW, storyUrl);
+		//
+		// startActivity(i);
+		Intent i = new Intent(getActivity(), ReaderActivity.class);
+		i.putExtra(ReaderFragment.KEY_TITLE, story.getTitle());
+		i.putExtra(ReaderFragment.KEY_DATE, story.getDate());
+		i.putExtra(ReaderFragment.KEY_CONTENT, story.getContent());
 		startActivity(i);
 	}
 
