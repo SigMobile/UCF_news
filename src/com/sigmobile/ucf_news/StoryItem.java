@@ -2,6 +2,9 @@ package com.sigmobile.ucf_news;
 
 import java.io.Serializable;
 
+import android.graphics.drawable.Drawable;
+import android.text.Html.ImageGetter;
+
 public class StoryItem implements Serializable {
 
 	/**
@@ -84,7 +87,15 @@ public class StoryItem implements Serializable {
 	}
 
 	private String parseHTML(String contents) {
-		return android.text.Html.fromHtml(contents).toString();
+		return android.text.Html.fromHtml(contents, new ImageGetter() {
+			
+			@Override
+			public Drawable getDrawable(String source) {
+				
+				return null;
+			}
+		} ,null).toString();
 	}
 
+	
 }
