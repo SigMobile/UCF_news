@@ -2,12 +2,16 @@ package com.sigmobile.ucf_news;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,9 +19,25 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 public class FeedFragment extends ListFragment {
 	private static final String TAG = "FeedFragment";
 
+	private static final String URL_JSON = "http://knightnews.com/api/get_recent_posts/";
+	private static final String TAG_POSTS = "posts";
+	private static final String TAG_URL = "url";
+	private static final String TAG_TITLE = "title";
+	private static final String TAG_CONTENT = "content";
+	private static final String TAG_DATE = "date";
+	private static final String TAG_IMAGE = "image";
+
+	private RequestQueue mQueue;
 	private ArrayList<StoryItem> mItems;
 
 	@Override
@@ -30,10 +50,37 @@ public class FeedFragment extends ListFragment {
 
 		mItems = new ArrayList<StoryItem>();
 
+		mQueue = Volley.newRequestQueue(getActivity());
+
+		JsonObjectRequest request = new JsonObjectRequest(URL_JSON, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						try {
+							VolleyLog.v("Response:%n %s", response.toString(4));
+							Log.i(TAG, "Response: " + response.toString());
+
+							parseJSON(response);
+							setUpAdapter();
+
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+				}, new Response.ErrorListener() {
+					@Override
+					public void onErrorResponse(VolleyError error) {
+						VolleyLog.e("Error: ", error.getMessage());
+					}
+				});
+
 		setUpAdapter();
 
+		request.setTag(this);
+		mQueue.add(request);
+
 		// Execute the AsyncTask to go and DL our RSS.
-		new FetchItemsTask().execute();
+		// new FetchItemsTask().execute();
 	}
 
 	private void setUpAdapter() {
@@ -137,6 +184,45 @@ public class FeedFragment extends ListFragment {
 
 		}
 
+	}
+
+	private void parseJSON(JSONObject response) {
+		if (response == null)
+			return;
+
+		try {
+			JSONArray posts = response.getJSONArray(TAG_POSTS);
+
+			for (int i = 0; i < posts.length(); i++) {
+				JSONObject p = posts.getJSONObject(i);
+
+				JSONObject customFields = p.getJSONObject("custom_fields");
+				String img = customFields.getString(TAG_IMAGE);
+
+				String title = p.getString(TAG_TITLE);
+				String url = p.getString(TAG_URL);
+				String content = p.getString(TAG_CONTENT);
+				String date = p.getString(TAG_DATE);
+
+				StoryItem item = new StoryItem();
+				item.setTitle(title);
+				item.setDate(date);
+				item.setContent(content);
+				item.setUrl(url);
+				item.setPictureUrl(img);
+
+				mItems.add(item);
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mQueue.cancelAll(this);
 	}
 
 }
