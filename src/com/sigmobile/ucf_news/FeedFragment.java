@@ -37,6 +37,8 @@ public class FeedFragment extends ListFragment {
 	private static final String TAG_CONTENT = "content";
 	private static final String TAG_DATE = "date";
 	private static final String TAG_IMAGE = "image";
+	private static final String TAG_AUTHOR = "author";
+	private static final String TAG_NAME = "name";
 
 	private RequestQueue mQueue;
 	private ArrayList<StoryItem> mItems;
@@ -152,9 +154,6 @@ public class FeedFragment extends ListFragment {
 	// data. It is what get's the data that will fill the list view.
 	private class StoryAdapter extends ArrayAdapter<StoryItem> {
 
-		// constuctor, as of right now we are going to use the default simple
-		// list item. Later we will create a newer nicer looking, more
-		// informative
 		public StoryAdapter(ArrayList<StoryItem> stories) {
 			super(getActivity(), R.layout.list_item_cell_story, stories);
 		}
@@ -171,7 +170,7 @@ public class FeedFragment extends ListFragment {
 
 			ImageView image = (ImageView) convertView
 					.findViewById(R.id.story_item_image);
-			
+
 			Picasso.with(getActivity()).load(s.getPictureUrl()).noFade()
 					.into(image);
 			// image.setImageResource(R.drawable.ic_launcher);
@@ -208,12 +207,16 @@ public class FeedFragment extends ListFragment {
 				String content = p.getString(TAG_CONTENT);
 				String date = p.getString(TAG_DATE);
 
+				JSONObject author = p.getJSONObject(TAG_AUTHOR);
+				String name = author.getString(TAG_NAME);
+
 				StoryItem item = new StoryItem();
 				item.setTitle(title);
 				item.setDate(date);
 				item.setContent(content);
 				item.setUrl(url);
 				item.setPictureUrl(img);
+				item.setAuthor(name);
 
 				mItems.add(item);
 			}

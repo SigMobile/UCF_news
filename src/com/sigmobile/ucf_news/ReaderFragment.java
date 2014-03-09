@@ -54,7 +54,7 @@ public class ReaderFragment extends Fragment {
 
 		mContentWebView = (WebView) v
 				.findViewById(R.id.fragment_reader_story_content);
-		mContentWebView.loadData(mStory.getUnparsedContent(), "text/html",
+		mContentWebView.loadData(mStory.getUnparsedContent(), "text/html; charset=utf-8",
 				"UTF-8");
 
 		return v;

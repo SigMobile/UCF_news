@@ -22,6 +22,7 @@ public class StoryItem implements Serializable {
 	private String mContent, mUnparsedContent;
 	private String mDate;
 	private String mPictureUrl;
+	private String mAuthor;
 	private Drawable mImageDrawable;
 
 	@Override
@@ -90,6 +91,14 @@ public class StoryItem implements Serializable {
 		// get rid of the escape char's that are in the url for some reason
 		pictureUrl = pictureUrl.replaceAll("\\\\/", "/");
 		mPictureUrl = formatPictureURL(pictureUrl);
+	}
+
+	public String getAuthor() {
+		return mAuthor;
+	}
+
+	public void setAuthor(String author) {
+		mAuthor = author;
 	}
 
 	public Drawable getImageDrawable() {
