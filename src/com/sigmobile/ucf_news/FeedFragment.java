@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 public class FeedFragment extends ListFragment {
 	private static final String TAG = "FeedFragment";
@@ -44,7 +45,7 @@ public class FeedFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// retains the fragment so it will stay alive during the activity lifeS
+		// retains the fragment so it will stay alive during the activity life
 		// cycle.
 		setRetainInstance(true);
 
@@ -155,7 +156,7 @@ public class FeedFragment extends ListFragment {
 		// list item. Later we will create a newer nicer looking, more
 		// informative
 		public StoryAdapter(ArrayList<StoryItem> stories) {
-			super(getActivity(), android.R.layout.simple_list_item_1, stories);
+			super(getActivity(), R.layout.list_item_cell_story, stories);
 		}
 
 		@Override
@@ -170,7 +171,10 @@ public class FeedFragment extends ListFragment {
 
 			ImageView image = (ImageView) convertView
 					.findViewById(R.id.story_item_image);
-			image.setImageResource(R.drawable.ic_launcher);
+			
+			Picasso.with(getActivity()).load(s.getPictureUrl()).noFade()
+					.into(image);
+			// image.setImageResource(R.drawable.ic_launcher);
 
 			TextView title = (TextView) convertView
 					.findViewById(R.id.story_item_title_text);

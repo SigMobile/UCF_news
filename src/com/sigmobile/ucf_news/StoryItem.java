@@ -1,6 +1,9 @@
 package com.sigmobile.ucf_news;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import android.graphics.drawable.Drawable;
 import android.text.Html.ImageGetter;
@@ -19,6 +22,7 @@ public class StoryItem implements Serializable {
 	private String mContent, mUnparsedContent;
 	private String mDate;
 	private String mPictureUrl;
+	private Drawable mImageDrawable;
 
 	@Override
 	public String toString() {
@@ -83,19 +87,53 @@ public class StoryItem implements Serializable {
 	}
 
 	public void setPictureUrl(String pictureUrl) {
-		mPictureUrl = pictureUrl;
+		// get rid of the escape char's that are in the url for some reason
+		pictureUrl = pictureUrl.replaceAll("\\\\/", "/");
+		mPictureUrl = formatPictureURL(pictureUrl);
+	}
+
+	public Drawable getImageDrawable() {
+		return mImageDrawable;
+	}
+
+	public void setImageDrawable(Drawable imageDrawable) {
+		mImageDrawable = imageDrawable;
 	}
 
 	private String parseHTML(String contents) {
 		return android.text.Html.fromHtml(contents, new ImageGetter() {
-			
+
 			@Override
 			public Drawable getDrawable(String source) {
-				
-				return null;
+				Drawable d;
+				try {
+					d = Drawable.createFromStream(
+							new URL(mPictureUrl).openStream(), "src name");
+					d.setBounds(0, 0, d.getIntrinsicWidth(),
+							d.getIntrinsicHeight());
+
+					setImageDrawable(d);
+
+					return d;
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
 			}
-		} ,null).toString();
+		}, null).toString();
 	}
 
-	
+	private String formatPictureURL(String pictureUrl) {
+		// get rid of the "["" at the start and the beginning of the URL.
+		if (pictureUrl.startsWith("[") && pictureUrl.endsWith("]"))
+			return pictureUrl.substring(2, pictureUrl.length() - 2);
+		else
+			return pictureUrl;
+	}
+
 }
