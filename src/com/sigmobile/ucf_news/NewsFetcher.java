@@ -31,12 +31,15 @@ public class NewsFetcher {
 
 		// open a http connection on the URL
 		//
-		// HttpURLConnection connection =
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 		try {
 			// We are going to grab a byte array full of the RSS(XML) data.
 			// We're in luck because there's a class called
 			// "ByteArrayOutputStream" We should prob use that.
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			InputStream in = connection.getInputStream();
 
 			// Create an input stream connected to the HTTPURLConnection we made
 
@@ -47,22 +50,26 @@ public class NewsFetcher {
 			//
 			// If things are'nt ok return null from here.
 			//
-			// if () {
-			// return null;
-			// }
+			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+				return null;
+			}
 
 			int bytesRead = 0;
 			byte[] buffer = new byte[1024];
 			// Use a while loop to read the contents of the inputStream.
-			// while () {
-			// //write to the out stream.
-			// }
-			// close everything up
+			while ((bytesRead = in.read()) > 0) {
+				// write to the out stream.
+				out.write(buffer, 0, bytesRead);
+
+			}
+			// close output stream
+			out.close();
 
 			// and then return the outputStream in the form of a byte array.
-			return null;
+			return out.toByteArray();
 		} finally {
 			// always disconnect the http connection.
+			connection.disconnect();
 
 		}
 	}
@@ -86,23 +93,29 @@ public class NewsFetcher {
 			// make a xml parser, must create an instance of the
 			// XMLPullParserFactory first.
 			//
-			// XmlPullParserFactory factory =
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			//
 			// now create the parser
-
+			XmlPullParser parser = factory.newPullParser();
 			//
 			// set the parser input to the string we just pulled down. (use the
 			// StringReader class tho)
 			//
+
+			parser.setInput(new StringReader(xmlString));
+
+			Log.i(TAG, "XML: " + xmlString);
+
+			parseItems(items, parser);
 
 			// parse the items using our partItems method (need to write the
 			// logic for that.
 
 		} catch (IOException e) {
 			Log.e(TAG, "Failed to fetch items", e);
-		} //catch (XmlPullParserException e) {
-			//Log.e(TAG, "Failed to parse items", e);
-	//	}
+		} catch (XmlPullParserException e) {
+			// Log.e(TAG, "Failed to parse items", e);
+		}
 		return items;
 	}
 
@@ -114,11 +127,33 @@ public class NewsFetcher {
 
 		// read
 		int eventType = parser.next();
+		boolean insideItem = false;
+		StoryItem story = null;
 
 		// while we aren't at the end of the document...
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			// This is where we will add the parsing logic to get the XML
 			// attributes and add them to out StoryItem data model class
+			if (eventType == XmlPullParser.START_TAG) {
+				if (parser.getName().equalsIgnoreCase("item")) {
+					insideItem = true;
+					story = new StoryItem();
+				}
+
+				if (parser.getName().equalsIgnoreCase("title") && insideItem) {
+					story.setTitle(parser.nextText());
+				}
+
+				if (parser.getName().equalsIgnoreCase("link") && insideItem) {
+					story.setUrl(parser.nextText());
+				}
+			}
+
+			else if (eventType == XmlPullParser.END_TAG && parser.getName().equalsIgnoreCase("item")) {
+					insideItem = false;
+					items.add(story);
+			}
+			eventType = parser.next();
 		}
 	}
 

@@ -29,6 +29,7 @@ public class FeedFragment extends ListFragment {
 		setRetainInstance(true);
 
 		// Execute the AsyncTask to go and DL our RSS.
+		new  FetchItemsTask().execute();
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class FeedFragment extends ListFragment {
 	//
 	// private inner class to do all of the background networking work.
 	private class FetchItemsTask extends
-			AsyncTask<Void, Void, ArrayList<StoryItem>> {
+		AsyncTask<Void, Void, ArrayList<StoryItem>> {
 
 		@Override
 		protected ArrayList<StoryItem> doInBackground(Void... arg0) {
@@ -80,7 +81,7 @@ public class FeedFragment extends ListFragment {
 				return new ArrayList<StoryItem>();
 
 			// return the method we wrote to download the xml
-			return null;
+			return new NewsFetcher().downloadStoryItems();
 		}
 
 		// we cannot update the UI in the background, which is why we use this
@@ -89,8 +90,9 @@ public class FeedFragment extends ListFragment {
 		@Override
 		protected void onPostExecute(ArrayList<StoryItem> result) {
 			// get the result and put it in our list of stories
-
+			mItems = result;
 			// then we need to fill up the adapter to the list view
+			setUpAdapter();
 		}
 	}
 
