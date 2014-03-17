@@ -1,31 +1,24 @@
 package com.sigmobile.ucf_news;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.sigmobile.ucf_news.URLImageParser.ImageGetterAsyncTask;
-
-import android.R.anim;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.text.Html.ImageGetter;
-import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.widget.TextView;
 
 public class ReaderFragment extends Fragment {
+	private static final String TAG = "ReaderFragment";
 
 	public static final String KEY_STORY = "com.sigmobile.ucf_news.KEY_STORY";
 	private TextView mTitleTextView, mDateTextView;
@@ -54,8 +47,11 @@ public class ReaderFragment extends Fragment {
 
 		mContentWebView = (WebView) v
 				.findViewById(R.id.fragment_reader_story_content);
-		mContentWebView.loadData(mStory.getUnparsedContent(), "text/html; charset=utf-8",
-				"UTF-8");
+
+		mContentWebView.loadData(mStory.getUnparsedContent(),
+				"text/html; charset=utf-8", "UTF-8");
+
+		Log.i(TAG, "Content: " + mStory.getUnparsedContent());
 
 		return v;
 	}
