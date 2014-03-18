@@ -147,6 +147,7 @@ public class NewsFetcher {
 				if (parser.getName().equalsIgnoreCase("link") && insideItem) {
 					story.setUrl(parser.nextText());
 				}
+				
 			}
 
 			else if (eventType == XmlPullParser.END_TAG && parser.getName().equalsIgnoreCase("item")) {
