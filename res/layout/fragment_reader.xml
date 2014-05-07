@@ -8,13 +8,15 @@
         android:id="@+id/fragment_reader_story_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_gravity="center" />
 
     <TextView
         android:id="@+id/fragment_reader_story_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        android:layout_gravity="center" />
 
     <ScrollView
         android:layout_width="wrap_content"

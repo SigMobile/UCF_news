@@ -5,7 +5,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html.ImageGetter;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings.PluginState;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -25,15 +23,32 @@ public class ReaderFragment extends Fragment {
 	private WebView mContentWebView;
 	private StoryItem mStory;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater,
-			final ViewGroup container, Bundle savedInstanceState) {
+	public ReaderFragment() {
+	}
 
+	public static ReaderFragment newInstance(StoryItem story) {
+		ReaderFragment rf = new ReaderFragment();
+		Bundle args = new Bundle();
+		args.putSerializable(KEY_STORY, story);
+		rf.setArguments(args);
+		return rf;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
 		// get the fragments arguments
 		Bundle args = getArguments();
 		if (args != null) {
 			mStory = (StoryItem) args.getSerializable(KEY_STORY);
 		}
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater,
+			final ViewGroup container, Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.fragment_reader, container, false);
 
@@ -43,7 +58,7 @@ public class ReaderFragment extends Fragment {
 
 		mDateTextView = (TextView) v
 				.findViewById(R.id.fragment_reader_story_date);
-		mDateTextView.setText(mStory.getDate());
+		mDateTextView.setText(mStory.getAuthor());
 
 		mContentWebView = (WebView) v
 				.findViewById(R.id.fragment_reader_story_content);
@@ -54,20 +69,6 @@ public class ReaderFragment extends Fragment {
 		Log.i(TAG, "Content: " + mStory.getUnparsedContent());
 
 		return v;
-	}
-
-	// empty constructor
-	public ReaderFragment() {
-	}
-
-	// new instance method that will be used to instantiate the fragment and get
-	// fragment arguments.
-	public static ReaderFragment newInstance(StoryItem story) {
-		ReaderFragment rf = new ReaderFragment();
-		Bundle args = new Bundle();
-		args.putSerializable(KEY_STORY, story);
-		rf.setArguments(args);
-		return rf;
 	}
 
 	private String parseHTML(String contents) {

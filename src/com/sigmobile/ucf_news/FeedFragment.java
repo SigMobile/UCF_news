@@ -49,8 +49,6 @@ public class FeedFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// retains the fragment so it will stay alive during the activity life
-		// cycle.
 		setRetainInstance(true);
 
 		mItems = new ArrayList<StoryItem>();
