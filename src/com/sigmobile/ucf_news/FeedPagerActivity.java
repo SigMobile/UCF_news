@@ -6,14 +6,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -37,6 +40,9 @@ public class FeedPagerActivity extends FragmentActivity {
 	private static final String TAG_AUTHOR = "author";
 	private static final String TAG_NAME = "name";
 
+	private static final float MIN_DISTANCE = 200;
+	private float x1 = 0, x2 = 0;
+
 	private ViewPager mPager;
 	private RequestQueue mQueue;
 	private ArrayList<StoryItem> mItems;
@@ -50,6 +56,34 @@ public class FeedPagerActivity extends FragmentActivity {
 
 		mPager = new ViewPager(this);
 		mPager.setId(R.id.viewPager);
+
+		mPager.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					x1 = event.getX();
+					break;
+				case MotionEvent.ACTION_UP:
+					x2 = event.getX();
+					float deltaX = x2 - x1;
+					if (Math.abs(deltaX) > MIN_DISTANCE) {
+						Log.d(TAG, "*SWIPE*");
+					} else {
+						// It was just a Tap
+						Log.d(TAG, "*TAP*");
+						Intent i = new Intent(getApplicationContext(),
+								ReaderActivity.class);
+						i.putExtra(ReaderFragment.KEY_STORY,
+								mItems.get(mPager.getCurrentItem()));
+						startActivity(i);
+					}
+					break;
+				}
+				return false;
+			}
+		});
 		setContentView(mPager);
 
 	}
