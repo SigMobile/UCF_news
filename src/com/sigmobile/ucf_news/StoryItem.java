@@ -23,6 +23,7 @@ public class StoryItem implements Serializable {
 	private String mDate;
 	private String mPictureUrl;
 	private String mAuthor;
+	private String mDescription, mUnParsedDescription;
 	private Drawable mImageDrawable;
 
 	@Override
@@ -73,6 +74,23 @@ public class StoryItem implements Serializable {
 
 	public void setUnparsedContent(String unparsedContent) {
 		mUnparsedContent = unparsedContent;
+	}
+
+	public String getDescription() {
+		return mDescription;
+	}
+
+	public void setDescription(String description) {
+		setUnParsedDescription(description);
+		mDescription = parseHTML(description);
+	}
+
+	public String getUnParsedDescription() {
+		return mUnParsedDescription;
+	}
+
+	public void setUnParsedDescription(String unParsedDescription) {
+		mUnParsedDescription = unParsedDescription;
 	}
 
 	public String getDate() {
