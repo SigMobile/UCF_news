@@ -40,8 +40,8 @@ public class FeedPagerActivity extends FragmentActivity {
 	private static final String TAG_AUTHOR = "author";
 	private static final String TAG_NAME = "name";
 
-	private static final float MIN_DISTANCE = 200;
-	private float x1 = 0, x2 = 0;
+	private static final float MIN_DISTANCE = 120;
+	private float x1 = 0, x2 = 0, xMovement = 0;
 
 	private ViewPager mPager;
 	private RequestQueue mQueue;
@@ -65,14 +65,20 @@ public class FeedPagerActivity extends FragmentActivity {
 				case MotionEvent.ACTION_DOWN:
 					x1 = event.getX();
 					break;
+
+				case MotionEvent.ACTION_MOVE:
+					xMovement += Math.abs(x1 - event.getX());
+					break;
 				case MotionEvent.ACTION_UP:
 					x2 = event.getX();
 					float deltaX = x2 - x1;
-					if (Math.abs(deltaX) > MIN_DISTANCE) {
-						Log.d(TAG, "*SWIPE*");
+					if (xMovement > MIN_DISTANCE
+							&& Math.abs(deltaX) > MIN_DISTANCE) {
+
+						// Log.d(TAG, "*SWIPE*");
 					} else {
 						// It was just a Tap
-						Log.d(TAG, "*TAP*");
+						// Log.d(TAG, "*TAP*");
 						Intent i = new Intent(getApplicationContext(),
 								ReaderActivity.class);
 						i.putExtra(ReaderFragment.KEY_STORY,
@@ -191,7 +197,7 @@ public class FeedPagerActivity extends FragmentActivity {
 
 		@Override
 		public int getCount() {
-			return mItems.size();
+			return 10;
 		}
 
 	}

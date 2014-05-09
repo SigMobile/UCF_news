@@ -15,9 +15,6 @@ public class AbridgedStoryFragment extends Fragment {
 	private static final String TAG = "AbridgedStoryActivity";
 
 	private static final String KEY_STORYITEM = "com.sigmobile.ucf_news.KEY_STORYITEM";
-	private static final float SWIPE_MAX_OFF_PATH = 250;
-	private static final float SWIPE_MIN_DISTANCE = 120;
-	private static final float SWIPE_THRESHOLD_VELOCITY = 200;
 
 	private ImageView mImageViewThumb;
 	private TextView mTextViewHeadline, mTextViewAuthor, mTextViewDesc;
@@ -48,8 +45,6 @@ public class AbridgedStoryFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_abridged, container, false);
-
-		LinearLayout root = (LinearLayout) v.findViewById(R.id.root);
 
 		mImageViewThumb = (ImageView) v
 				.findViewById(R.id.abridged_imageView_thumbnail);
