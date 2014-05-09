@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -40,7 +41,6 @@ public class FeedPagerActivity extends FragmentActivity {
 	private RequestQueue mQueue;
 	private ArrayList<StoryItem> mItems;
 	private JsonObjectRequest mRequest;
-	private FragmentManager fm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,6 @@ public class FeedPagerActivity extends FragmentActivity {
 		mPager = new ViewPager(this);
 		mPager.setId(R.id.viewPager);
 		setContentView(mPager);
-		
-		fm = getSupportFragmentManager();
-//		setUpAdapter();
 
 	}
 
@@ -77,7 +74,7 @@ public class FeedPagerActivity extends FragmentActivity {
 			return;
 		}
 		if (mItems != null) {
-			mPager.setAdapter(new PagerAdapter(fm));
+			mPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
 		} else {
 			mPager.setAdapter(null);
 		}
