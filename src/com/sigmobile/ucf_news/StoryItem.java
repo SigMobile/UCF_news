@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.graphics.drawable.Drawable;
+import android.text.Html;
 import android.text.Html.ImageGetter;
 
 public class StoryItem implements Serializable {
@@ -17,7 +18,7 @@ public class StoryItem implements Serializable {
 	// We will at least need a title and a URL to the story. I'm not sure what
 	// other xml attributes are in the the feed, we can add more later, like a
 	// url to a picture or something
-	private String mTitle;
+	private String mTitle, mUnparsedTitle;
 	private String mUrl;
 	private String mContent, mUnparsedContent;
 	private String mDate;
@@ -37,7 +38,16 @@ public class StoryItem implements Serializable {
 	}
 
 	public void setTitle(String title) {
-		mTitle = title;
+		setUnparsedTitle(title);
+		mTitle = parseHTML(title);
+	}
+
+	public String getUnparsedTitle() {
+		return mUnparsedTitle;
+	}
+
+	public void setUnparsedTitle(String unparsedTitle) {
+		mUnparsedTitle = unparsedTitle;
 	}
 
 	public String getUrl() {
@@ -162,5 +172,4 @@ public class StoryItem implements Serializable {
 		else
 			return pictureUrl;
 	}
-
 }

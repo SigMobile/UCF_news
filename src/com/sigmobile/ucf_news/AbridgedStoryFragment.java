@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -18,6 +18,7 @@ public class AbridgedStoryFragment extends Fragment {
 
 	private ImageView mImageViewThumb;
 	private TextView mTextViewHeadline, mTextViewAuthor, mTextViewDesc;
+	private WebView mHeadlineWebView;
 	private StoryItem mItem;
 
 	public AbridgedStoryFragment() {

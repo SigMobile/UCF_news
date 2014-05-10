@@ -40,6 +40,8 @@ public class FeedPagerActivity extends FragmentActivity {
 	private static final String TAG_AUTHOR = "author";
 	private static final String TAG_NAME = "name";
 
+	private static final String STATE_POSITION = "com.sigmobile.ucf_news.STATE_POSITION";
+
 	private static final float MIN_DISTANCE = 120;
 	private float x1 = 0, x2 = 0, xMovement = 0;
 
@@ -65,15 +67,10 @@ public class FeedPagerActivity extends FragmentActivity {
 				case MotionEvent.ACTION_DOWN:
 					x1 = event.getX();
 					break;
-
-				case MotionEvent.ACTION_MOVE:
-					xMovement += Math.abs(x1 - event.getX());
-					break;
 				case MotionEvent.ACTION_UP:
 					x2 = event.getX();
 					float deltaX = x2 - x1;
-					if (xMovement > MIN_DISTANCE
-							&& Math.abs(deltaX) > MIN_DISTANCE) {
+					if (Math.abs(deltaX) > MIN_DISTANCE) {
 
 						// Log.d(TAG, "*SWIPE*");
 					} else {
@@ -90,6 +87,12 @@ public class FeedPagerActivity extends FragmentActivity {
 				return false;
 			}
 		});
+
+		mPager.setPageTransformer(true, new DepthPageTransformer());
+
+		if (savedInstanceState != null) {
+			mPager.setCurrentItem(savedInstanceState.getInt(STATE_POSITION));
+		}
 		setContentView(mPager);
 
 	}
@@ -107,6 +110,12 @@ public class FeedPagerActivity extends FragmentActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		mQueue.cancelAll(this);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putInt(STATE_POSITION, mPager.getCurrentItem());
+		super.onSaveInstanceState(outState);
 	}
 
 	private void setUpAdapter() {
@@ -200,5 +209,42 @@ public class FeedPagerActivity extends FragmentActivity {
 			return 10;
 		}
 
+	}
+
+	private class DepthPageTransformer implements ViewPager.PageTransformer {
+		private static final float MIN_SCALE = 0.75f;
+
+		public void transformPage(View view, float position) {
+			int pageWidth = view.getWidth();
+
+			if (position < -1) { // [-Infinity,-1)
+				// This page is way off-screen to the left.
+				view.setAlpha(0);
+
+			} else if (position <= 0) { // [-1,0]
+				// Use the default slide transition when moving to the left page
+				view.setAlpha(1);
+				view.setTranslationX(0);
+				view.setScaleX(1);
+				view.setScaleY(1);
+
+			} else if (position <= 1) { // (0,1]
+				// Fade the page out.
+				view.setAlpha(1 - position);
+
+				// Counteract the default slide transition
+				view.setTranslationX(pageWidth * -position);
+
+				// Scale the page down (between MIN_SCALE and 1)
+				float scaleFactor = MIN_SCALE + (1 - MIN_SCALE)
+						* (1 - Math.abs(position));
+				view.setScaleX(scaleFactor);
+				view.setScaleY(scaleFactor);
+
+			} else { // (1,+Infinity]
+				// This page is way off-screen to the right.
+				view.setAlpha(0);
+			}
+		}
 	}
 }
