@@ -1,14 +1,7 @@
 package com.sigmobile.ucf_news;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html.ImageGetter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +26,12 @@ public class ReaderFragment extends Fragment {
 		rf.setArguments(args);
 		return rf;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 		// get the fragments arguments
 		Bundle args = getArguments();
 		if (args != null) {
@@ -66,38 +59,8 @@ public class ReaderFragment extends Fragment {
 		mContentWebView.loadData(mStory.getUnparsedContent(),
 				"text/html; charset=utf-8", "UTF-8");
 
-		Log.i(TAG, "Content: " + mStory.getUnparsedContent());
+		// Log.i(TAG, "Content: " + mStory.getUnparsedContent());
 
 		return v;
 	}
-
-	private String parseHTML(String contents) {
-		return android.text.Html.fromHtml(contents, new ImageGetter() {
-
-			@Override
-			public Drawable getDrawable(String source) {
-				Drawable d;
-				try {
-					d = Drawable.createFromStream(
-							new URL(mStory.getPictureUrl()).openStream(),
-							"src name");
-					d.setBounds(0, 0, d.getIntrinsicWidth(),
-							d.getIntrinsicHeight());
-
-					// setImageDrawable(d);
-
-					return d;
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return null;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return null;
-				}
-			}
-		}, null).toString();
-	}
-
 }

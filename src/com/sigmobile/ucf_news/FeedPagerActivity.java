@@ -43,7 +43,7 @@ public class FeedPagerActivity extends FragmentActivity {
 	private static final String STATE_POSITION = "com.sigmobile.ucf_news.STATE_POSITION";
 
 	private static final float MIN_DISTANCE = 120;
-	private float x1 = 0, x2 = 0, xMovement = 0;
+	private float x1 = 0, x2 = 0;
 
 	private ViewPager mPager;
 	private RequestQueue mQueue;
