@@ -2,7 +2,10 @@ package com.sigmobile.ucf_news;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,10 +37,24 @@ public class AbridgedStoryFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setDisplayHomeAsUpEnabled(true);
+
 		if (getArguments() != null) {
 			mItem = (StoryItem) getArguments().getSerializable(KEY_STORYITEM);
 		}
 
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(getActivity());
+			return true;
+
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

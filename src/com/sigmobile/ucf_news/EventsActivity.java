@@ -8,12 +8,15 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import android.app.ListActivity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -23,7 +26,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class EventsActivity extends ListActivity {
+public class EventsActivity extends ActionBarActivity {
 	private static final String TAG = "EventsActivity";
 
 	private static final String URL_EVENTS = "http://knightnews.com/events.xml";
@@ -31,10 +34,17 @@ public class EventsActivity extends ListActivity {
 	private RequestQueue mQueue;
 	private ArrayList<EventItem> mItems;
 	private StringRequest mRequest;
+	private ListView mList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_events_list);
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		mList = (ListView) findViewById(R.id.list_events);
+
 		mQueue = Volley.newRequestQueue(this);
 
 	}
@@ -54,13 +64,24 @@ public class EventsActivity extends ListActivity {
 		mQueue.cancelAll(this);
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	private void setUpAdapter() {
 		if (this == null)
 			return;
 		if (mItems != null) {
-			setListAdapter(new EventsAdapter(mItems));
+			mList.setAdapter(new EventsAdapter(mItems));
 		} else {
-			setListAdapter(null);
+			mList.setAdapter(null);
 		}
 
 	}
@@ -83,11 +104,9 @@ public class EventsActivity extends ListActivity {
 								setUpAdapter();
 
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						} catch (XmlPullParserException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -107,10 +126,7 @@ public class EventsActivity extends ListActivity {
 		int eventType = parser.next();
 		EventItem story = null;
 
-		// while we aren't at the end of the document...
 		while (eventType != XmlPullParser.END_DOCUMENT) {
-			// This is where we will add the parsing logic to get the XML
-			// attributes and add them to out StoryItem data model class
 			if (eventType == XmlPullParser.START_TAG) {
 
 				if (parser.getName().equalsIgnoreCase("events")) {
@@ -139,6 +155,7 @@ public class EventsActivity extends ListActivity {
 	}
 
 	private class EventsAdapter extends ArrayAdapter<EventItem> {
+
 		public EventsAdapter(ArrayList<EventItem> stories) {
 			super(getApplicationContext(), android.R.layout.simple_list_item_1,
 					stories);
@@ -170,7 +187,6 @@ public class EventsActivity extends ListActivity {
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return mItems.size();
 		}
 

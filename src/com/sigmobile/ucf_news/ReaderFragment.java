@@ -2,7 +2,11 @@ package com.sigmobile.ucf_news;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -32,11 +36,25 @@ public class ReaderFragment extends Fragment {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
+		((ActionBarActivity) getActivity()).getSupportActionBar()
+				.setDisplayHomeAsUpEnabled(true);
+
 		// get the fragments arguments
 		Bundle args = getArguments();
 		if (args != null) {
 			mStory = (StoryItem) args.getSerializable(KEY_STORY);
 		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(getActivity());
+			return true;
+
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
