@@ -13,10 +13,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -43,7 +43,6 @@ public class FeedPagerActivity extends ActionBarActivity {
 	private float x1 = 0, x2 = 0;
 
 	private ViewPager mPager;
-	private RequestQueue mQueue;
 	private JsonObjectRequest mRequest;
 
 	@Override
@@ -69,10 +68,11 @@ public class FeedPagerActivity extends ActionBarActivity {
 					x2 = event.getX();
 					float deltaX = x2 - x1;
 					if (Math.abs(deltaX) > MIN_DISTANCE) {
-
 						// Log.d(TAG, "*SWIPE*");
 					} else {
 						// Log.d(TAG, "*TAP*");
+						v.playSoundEffect(SoundEffectConstants.CLICK);
+
 						Intent i = new Intent(getApplicationContext(),
 								ReaderActivity.class);
 						i.putExtra(ReaderFragment.KEY_STORY, StoryListManager
