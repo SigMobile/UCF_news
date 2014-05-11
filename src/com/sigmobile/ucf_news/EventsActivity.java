@@ -31,7 +31,6 @@ public class EventsActivity extends ActionBarActivity {
 
 	private static final String URL_EVENTS = "http://knightnews.com/events.xml";
 
-	private RequestQueue mQueue;
 	private ArrayList<EventItem> mItems;
 	private StringRequest mRequest;
 	private ListView mList;
@@ -45,8 +44,6 @@ public class EventsActivity extends ActionBarActivity {
 
 		mList = (ListView) findViewById(R.id.list_events);
 
-		mQueue = Volley.newRequestQueue(this);
-
 	}
 
 	@Override
@@ -54,14 +51,13 @@ public class EventsActivity extends ActionBarActivity {
 		super.onResume();
 		mItems = new ArrayList<EventItem>();
 		fetchEventItems();
-		mRequest.setTag(this);
-		mQueue.add(mRequest);
+		RequestManager.getInstance(this).addToRequestQueue(mRequest, TAG);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mQueue.cancelAll(this);
+		RequestManager.getInstance(this).cancelRequestByTag(TAG);
 	}
 
 	@Override
@@ -116,7 +112,6 @@ public class EventsActivity extends ActionBarActivity {
 						VolleyLog.e("Error: ", error.getMessage());
 					}
 				});
-
 	}
 
 	private void parseItems(XmlPullParser parser)

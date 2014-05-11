@@ -3,7 +3,6 @@ package com.sigmobile.ucf_news;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -45,7 +44,7 @@ public class ReaderFragment extends Fragment {
 			mStory = (StoryItem) args.getSerializable(KEY_STORY);
 		}
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -76,8 +75,6 @@ public class ReaderFragment extends Fragment {
 
 		mContentWebView.loadData(mStory.getUnparsedContent(),
 				"text/html; charset=utf-8", "UTF-8");
-
-		// Log.i(TAG, "Content: " + mStory.getUnparsedContent());
 
 		return v;
 	}

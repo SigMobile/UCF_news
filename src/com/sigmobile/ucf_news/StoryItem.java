@@ -20,7 +20,7 @@ public class StoryItem implements Serializable {
 	// url to a picture or something
 	private String mTitle, mUnparsedTitle;
 	private String mUrl;
-	private String mContent, mUnparsedContent;
+	private String mContent, mUnparsedContent, mContentNoVideo;
 	private String mDate;
 	private String mPictureUrl;
 	private String mAuthor;
@@ -74,8 +74,18 @@ public class StoryItem implements Serializable {
 	public void setContent(String content) {
 
 		setUnparsedContent(content);
+		
+		setContentNoVideo(content);
 
 		mContent = parseHTML(content);
+	}
+
+	public String getContentNoVideo() {
+		return mContentNoVideo;
+	}
+
+	public void setContentNoVideo(String contentNoVideo) {
+		mContentNoVideo = contentNoVideo;
 	}
 
 	public String getUnparsedContent() {

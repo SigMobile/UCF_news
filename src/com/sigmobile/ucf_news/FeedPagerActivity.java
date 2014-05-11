@@ -23,7 +23,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 public class FeedPagerActivity extends ActionBarActivity {
 	private static final String TAG = "FeedPagerActivity";
@@ -53,8 +52,6 @@ public class FeedPagerActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		mQueue = Volley.newRequestQueue(this);
 
 		mPager = new ViewPager(this);
 		mPager.setId(R.id.viewPager);
@@ -102,14 +99,13 @@ public class FeedPagerActivity extends ActionBarActivity {
 		super.onResume();
 		mItems = new ArrayList<StoryItem>();
 		fetchNewsItems();
-		mRequest.setTag(this);
-		mQueue.add(mRequest);
+		RequestManager.getInstance(this).addToRequestQueue(mRequest, TAG);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		mQueue.cancelAll(this);
+		RequestManager.getInstance(this).cancelRequestByTag(TAG);
 	}
 
 	@Override
