@@ -48,7 +48,7 @@ public class FeedPagerActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		mPager = new ViewPager(this);
 		mPager.setId(R.id.viewPager);
 

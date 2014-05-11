@@ -1,9 +1,14 @@
 package com.sigmobile.ucf_news;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +22,7 @@ public class ReaderFragment extends Fragment {
 	private TextView mTitleTextView, mDateTextView;
 	private WebView mContentWebView;
 	private StoryItem mStory;
+	private ShareActionProvider mShareActionProvider;
 
 	public ReaderFragment() {
 	}
@@ -33,12 +39,34 @@ public class ReaderFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 
 		// get the fragments arguments
 		Bundle args = getArguments();
 		if (args != null) {
 			mStory = (StoryItem) args.getSerializable(KEY_STORY);
 		}
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.feed, menu);
+		// Set up ShareActionProvider's default share intent
+		MenuItem shareItem = menu.findItem(R.id.action_share);
+		mShareActionProvider = (ShareActionProvider) MenuItemCompat
+				.getActionProvider(shareItem);
+
+		if (mShareActionProvider != null) {
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("text/plain");
+			intent.putExtra(Intent.EXTRA_SUBJECT, mStory.getTitle());
+			intent.putExtra(Intent.EXTRA_TEXT, mStory.getDescription() + "\n"
+					+ mStory.getUrl() + "\n\n" + "Sent via KnightNews");
+
+			mShareActionProvider.setShareIntent(intent);
+		}
+
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	@Override
@@ -73,4 +101,5 @@ public class ReaderFragment extends Fragment {
 
 		return v;
 	}
+
 }
