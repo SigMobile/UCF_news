@@ -53,6 +53,10 @@ public class FeedPagerActivity extends ActionBarActivity {
 		mPager = new ViewPager(this);
 		mPager.setId(R.id.viewPager);
 
+		if (savedInstanceState != null) {
+			mPager.setCurrentItem(savedInstanceState.getInt(STATE_POSITION));
+		}
+
 		mPager.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -68,7 +72,6 @@ public class FeedPagerActivity extends ActionBarActivity {
 
 						// Log.d(TAG, "*SWIPE*");
 					} else {
-						// It was just a Tap
 						// Log.d(TAG, "*TAP*");
 						Intent i = new Intent(getApplicationContext(),
 								ReaderActivity.class);
@@ -85,11 +88,7 @@ public class FeedPagerActivity extends ActionBarActivity {
 
 		mPager.setPageTransformer(true, new DepthPageTransformer());
 
-		if (savedInstanceState != null) {
-			mPager.setCurrentItem(savedInstanceState.getInt(STATE_POSITION));
-		}
 		setContentView(mPager);
-
 	}
 
 	@Override
@@ -201,9 +200,9 @@ public class FeedPagerActivity extends ActionBarActivity {
 
 		@Override
 		public int getCount() {
-			return 10;
+			return StoryListManager.getInstance(getApplicationContext())
+					.getStoryList().size();
 		}
-
 	}
 
 	private class DepthPageTransformer implements ViewPager.PageTransformer {

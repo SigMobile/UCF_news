@@ -19,12 +19,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 public class EventsActivity extends ActionBarActivity {
 	private static final String TAG = "EventsActivity";
@@ -66,7 +64,6 @@ public class EventsActivity extends ActionBarActivity {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-
 		}
 		return super.onOptionsItemSelected(item);
 	}

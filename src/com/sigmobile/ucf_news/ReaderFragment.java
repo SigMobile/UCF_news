@@ -47,7 +47,6 @@ public class ReaderFragment extends Fragment {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(getActivity());
 			return true;
-
 		}
 		return super.onOptionsItemSelected(item);
 	}
