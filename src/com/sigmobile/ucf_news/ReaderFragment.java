@@ -3,7 +3,6 @@ package com.sigmobile.ucf_news;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +33,6 @@ public class ReaderFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-
-		((ActionBarActivity) getActivity()).getSupportActionBar()
-				.setDisplayHomeAsUpEnabled(true);
 
 		// get the fragments arguments
 		Bundle args = getArguments();

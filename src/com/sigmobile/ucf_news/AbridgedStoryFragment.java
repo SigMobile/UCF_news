@@ -37,9 +37,6 @@ public class AbridgedStoryFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		((ActionBarActivity) getActivity()).getSupportActionBar()
-				.setDisplayHomeAsUpEnabled(true);
-
 		if (getArguments() != null) {
 			mItem = (StoryItem) getArguments().getSerializable(KEY_STORYITEM);
 		}

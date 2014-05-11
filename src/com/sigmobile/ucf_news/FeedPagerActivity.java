@@ -1,7 +1,5 @@
 package com.sigmobile.ucf_news;
 
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +44,6 @@ public class FeedPagerActivity extends ActionBarActivity {
 
 	private ViewPager mPager;
 	private RequestQueue mQueue;
-	private ArrayList<StoryItem> mItems;
 	private JsonObjectRequest mRequest;
 
 	@Override
@@ -75,8 +72,9 @@ public class FeedPagerActivity extends ActionBarActivity {
 						// Log.d(TAG, "*TAP*");
 						Intent i = new Intent(getApplicationContext(),
 								ReaderActivity.class);
-						i.putExtra(ReaderFragment.KEY_STORY,
-								mItems.get(mPager.getCurrentItem()));
+						i.putExtra(ReaderFragment.KEY_STORY, StoryListManager
+								.getInstance(getApplicationContext())
+								.getStoryList().get(mPager.getCurrentItem()));
 						startActivity(i);
 					}
 					break;
@@ -97,7 +95,6 @@ public class FeedPagerActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mItems = new ArrayList<StoryItem>();
 		fetchNewsItems();
 		RequestManager.getInstance(this).addToRequestQueue(mRequest, TAG);
 	}
@@ -118,7 +115,7 @@ public class FeedPagerActivity extends ActionBarActivity {
 		if (this == null) {
 			return;
 		}
-		if (mItems != null) {
+		if (StoryListManager.getInstance(this).getStoryList() != null) {
 			mPager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
 		} else {
 			mPager.setAdapter(null);
@@ -180,7 +177,7 @@ public class FeedPagerActivity extends ActionBarActivity {
 				item.setPictureUrl(img);
 				item.setAuthor(name);
 
-				mItems.add(item);
+				StoryListManager.getInstance(this).addStory(item);
 			}
 
 		} catch (JSONException e) {
@@ -196,7 +193,9 @@ public class FeedPagerActivity extends ActionBarActivity {
 
 		@Override
 		public Fragment getItem(int pos) {
-			StoryItem abridgedStory = mItems.get(pos);
+			StoryItem abridgedStory = StoryListManager
+					.getInstance(getApplicationContext()).getStoryList()
+					.get(pos);
 			return AbridgedStoryFragment.newInstance(abridgedStory);
 		}
 
